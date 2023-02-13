@@ -15,5 +15,7 @@ namespace Customer.Services.Interfaces
         BaseResponceModel<Customers> GetCustomerById(int id);
         BaseResponceModel<bool> AddCustomer(CustomerDto customers);
         BaseResponceModel<bool> DeleteCustomer(int id);
+        BaseResponceModel<bool> UpdateCustomer(UpdatedCustomers customer);
+
     }
 }

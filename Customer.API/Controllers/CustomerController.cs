@@ -38,5 +38,10 @@ namespace Customer.API.Controllers
         {
             return _customerService.DeleteCustomer(id);
         }
+        [HttpPost("UpdateCustomer")]
+        public BaseResponceModel<bool> UpdateCustomer(UpdatedCustomers customer)
+        {
+            return _customerService.UpdateCustomer(customer);
+        }
     }
 }

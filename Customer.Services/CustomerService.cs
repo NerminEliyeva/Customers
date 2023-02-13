@@ -87,12 +87,12 @@ namespace Customer.Services
                 if (string.IsNullOrWhiteSpace(customers?.CustomerSalary.ToString()) || string.IsNullOrEmpty(customers?.CustomerSalary.ToString()))
                 {
                     model.Message = "Maas bos ola bilmez";
-                     return model;
+                    return model;
                 }
                 if (string.IsNullOrWhiteSpace(customers?.CustomerCity.ToString()) || string.IsNullOrEmpty(customers?.CustomerCity.ToString()))
                 {
                     model.Message = "Olke bos ola bilmez";
-                     return model;
+                    return model;
                 }
                 var customer = new Customers
                 {
@@ -103,7 +103,7 @@ namespace Customer.Services
                     CustomerCity = customers.CustomerCity,
                     CustomerStatus = 1
                 };
-             
+
                 _customerRepository.Add(customer);
                 _customerRepository.SaveChanges();
 
@@ -119,7 +119,7 @@ namespace Customer.Services
                 model.Message = "Xeta bas verdi" + ex.ToString();
                 return model;
             }
-           
+
         }
         public BaseResponceModel<bool> DeleteCustomer(int id)
         {
@@ -155,7 +155,66 @@ namespace Customer.Services
                 model.Message = "Xeta bas verdi" + ex.ToString();
                 return model;
             }
-            
+
+        }
+        public BaseResponceModel<bool> UpdateCustomer(UpdatedCustomers customer)
+        {
+            BaseResponceModel<bool> model = new BaseResponceModel<bool>();
+            try
+            {
+                var oldCustomer = _customerRepository.GetById(customer.CustomerId);
+
+                if (customer is null || customer.CustomerId <= 0)
+                {
+                    model.IsSuccess = false;
+                    model.Obj = false;
+                    model.Message = "Bos deyer gonderile bilmez";
+                    return model;
+                }
+                if (oldCustomer is null)
+                {
+                    model.IsSuccess = false;
+                    model.Obj = false;
+                    model.Message = "Axtardiginiz melumat tapilmadi";
+                    return model;
+                }
+
+                if (!string.IsNullOrWhiteSpace(customer.CustomerName) && !string.IsNullOrEmpty(customer.CustomerName))
+                {
+                    oldCustomer.CustomerName = customer.CustomerName;
+                }
+                if (!string.IsNullOrWhiteSpace(customer.CustomerSurname) && !string.IsNullOrEmpty(customer.CustomerSurname))
+                {
+                    oldCustomer.CustomerSurname = customer.CustomerSurname;
+                }
+                if (!string.IsNullOrWhiteSpace(customer.CustomerPosition) && !string.IsNullOrEmpty(customer.CustomerPosition))
+                {
+                    oldCustomer.CustomerPosition = customer.CustomerPosition;
+                }
+                if (customer.CustomerSalary > 0)
+                {
+                    oldCustomer.CustomerSalary = customer.CustomerSalary;
+                }
+                if (customer.CustomerCity > 0)
+                {
+                    oldCustomer.CustomerCity = customer.CustomerCity;
+                }
+
+                _customerRepository.SaveChanges();
+                model.IsSuccess = true;
+                model.Obj = true;
+                model.Message = "Emelliyyat ugurudur";
+                return model;
+            }
+            catch (Exception ex)
+            {
+                model.IsSuccess = false;
+                model.Obj = false;
+                model.Message = "Xeta bas verdi" + ex;
+                return model;
+            }
+
+
         }
 
     }
