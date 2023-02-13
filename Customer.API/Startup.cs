@@ -1,7 +1,13 @@
+using Customer.DAL.Abstract.Repository;
+using Customer.DAL.Concrete.EntityFramework;
+using Customer.DAL.Concrete.Reposiyory;
+using Customer.Services;
+using Customer.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,12 +34,15 @@ namespace Customer.API
         {
 
             services.AddControllers();
-            //services.AddDbContext<NewsDbContext>(options =>
-            //     options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
+            services.AddDbContext<CustomerDbContext>(options =>
+                 options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Customer.API", Version = "v1" });
             });
+            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<ICustomerRepository, CustomerRepository>();
+            services.AddTransient<ICountryRepository, CountryRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
