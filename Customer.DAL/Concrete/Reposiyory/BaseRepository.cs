@@ -31,6 +31,10 @@ namespace Customer.DAL.Concrete.Reposiyory
         {
             _dbSet.Add(entity);
         }
+        public void SaveChanges()
+        {
+            _customerDbContext.SaveChanges();
+        }
 
     }
 }

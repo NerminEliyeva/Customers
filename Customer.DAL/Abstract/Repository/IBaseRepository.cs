@@ -11,5 +11,6 @@ namespace Customer.DAL.Abstract.Repository
         IEnumerable<T> GetAll();
         T GetById(int id);
         void Add(T entity);
+        void SaveChanges();
     }
 }

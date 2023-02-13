@@ -1,4 +1,5 @@
 ﻿using Customer.Models.Entities;
+using Customer.Models.Request;
 using Customer.Models.Responce;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,7 @@ namespace Customer.Services.Interfaces
     {
         BaseResponceModel<List<Customers>> GetAllCustomers();
         BaseResponceModel<Customers> GetCustomerById(int id);
+        BaseResponceModel<bool> AddCustomer(CustomerDto customers);
+        BaseResponceModel<bool> DeleteCustomer(int id);
     }
 }

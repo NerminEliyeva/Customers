@@ -1,4 +1,5 @@
 ﻿using Customer.Models.Entities;
+using Customer.Models.Request;
 using Customer.Models.Responce;
 using Customer.Services;
 using Customer.Services.Interfaces;
@@ -27,6 +28,15 @@ namespace Customer.API.Controllers
         {
             return _customerService.GetCustomerById(id);
         }
-
+        [HttpPost("AddCustomer")]
+        public BaseResponceModel<bool> AddCustomer(CustomerDto customer)
+        {
+            return _customerService.AddCustomer(customer);
+        }
+        [HttpPost("DeleteCustomer/{id}")]
+        public BaseResponceModel<bool> DeleteCustomer(int id)
+        {
+            return _customerService.DeleteCustomer(id);
+        }
     }
 }
