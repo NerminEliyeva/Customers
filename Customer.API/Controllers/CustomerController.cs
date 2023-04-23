@@ -19,15 +19,27 @@ namespace Customer.API.Controllers
             _customerService = customerService;
         }
         [HttpGet("GetAllCustomers")]
-        public BaseResponceModel<List<Customers>> GetAllCustomers()
+        public BaseResponceModel<List<CustomerAndCity>> GetAllCustomers()
         {
             return _customerService.GetAllCustomers();
+        }
+        [HttpGet("GetAllCountries")]
+        public BaseResponceModel<List<Countries>> GetAllCountries()
+        {
+            return _customerService.GetAllCountries();
         }
         [HttpGet("GetCustomersById/{id}")]
         public BaseResponceModel<Customers> GetCustomersById(int id)
         {
             return _customerService.GetCustomerById(id);
         }
+        [HttpGet("GetCountryById/{id}")]
+        public BaseResponceModel<Countries> GetCountryById(int id)
+        {
+            return _customerService.GetCountryById(id);
+        }
+
+
         [HttpPost("AddCustomer")]
         public BaseResponceModel<bool> AddCustomer(CustomerDto customer)
         {
@@ -38,10 +50,10 @@ namespace Customer.API.Controllers
         {
             return _customerService.DeleteCustomer(id);
         }
-        [HttpPost("UpdateCustomer")]
-        public BaseResponceModel<bool> UpdateCustomer(UpdatedCustomers customer)
+        [HttpPost("UpdateCustomer/{id}")]
+        public BaseResponceModel<bool> UpdateCustomer(int id,UpdatedCustomers customer)
         {
-            return _customerService.UpdateCustomer(customer);
+            return _customerService.UpdateCustomer(id,customer);
         }
     }
 }

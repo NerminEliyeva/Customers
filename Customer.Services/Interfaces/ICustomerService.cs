@@ -11,11 +11,12 @@ namespace Customer.Services.Interfaces
 {
     public interface ICustomerService
     {
-        BaseResponceModel<List<Customers>> GetAllCustomers();
+        BaseResponceModel<List<CustomerAndCity>> GetAllCustomers();
+        BaseResponceModel<List<Countries>> GetAllCountries();
         BaseResponceModel<Customers> GetCustomerById(int id);
         BaseResponceModel<bool> AddCustomer(CustomerDto customers);
         BaseResponceModel<bool> DeleteCustomer(int id);
-        BaseResponceModel<bool> UpdateCustomer(UpdatedCustomers customer);
-
+        BaseResponceModel<bool> UpdateCustomer(int id, UpdatedCustomers customer);
+        BaseResponceModel<Countries> GetCountryById(int id);
     }
 }

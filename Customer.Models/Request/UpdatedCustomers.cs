@@ -8,7 +8,6 @@ namespace Customer.Models.Request
 {
     public class UpdatedCustomers
     {
-        public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerSurname { get; set; }
         public string CustomerPosition { get; set; }

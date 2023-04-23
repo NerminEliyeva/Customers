@@ -14,14 +14,33 @@ namespace Customer.Services
     public class CustomerService : ICustomerService
     {
         private readonly ICustomerRepository _customerRepository;
-        public CustomerService(ICustomerRepository customerRepository)
+        private readonly ICountryRepository _countryRepository;
+        public CustomerService(ICustomerRepository customerRepository, ICountryRepository countryRepository)
         {
             _customerRepository = customerRepository;
+            _countryRepository = countryRepository;
         }
-        public BaseResponceModel<List<Customers>> GetAllCustomers()
+        public BaseResponceModel<List<CustomerAndCity>> GetAllCustomers()
         {
-            BaseResponceModel<List<Customers>> model = new BaseResponceModel<List<Customers>>();
-            var result = _customerRepository.GetAll().Where(x => x.CustomerStatus == 1).ToList();
+            BaseResponceModel<List<CustomerAndCity>> model = new BaseResponceModel<List<CustomerAndCity>>();
+            var result = _customerRepository.GetCustomerWithCity().Where(x => x.CustomerDto.CustomerStatus == 1).ToList();
+
+            if (result.Count() <= 0)
+            {
+                model.Obj = null;
+                model.IsSuccess = false;
+                model.Message = "Bazada melumat tapilmadi";
+                return model;
+            }
+            model.Obj = result;
+            model.IsSuccess = true;
+            model.Message = "Emeliyyat ugurludur";
+            return model;
+        }
+        public BaseResponceModel<List<Countries>> GetAllCountries()
+        {
+            BaseResponceModel<List<Countries>> model = new BaseResponceModel<List<Countries>>();
+            var result = _countryRepository.GetAll().ToList();
 
             if (result.Count() <= 0)
             {
@@ -41,6 +60,33 @@ namespace Customer.Services
             try
             {
                 var result = _customerRepository.GetById(id);
+                if (result is null)
+                {
+                    model.IsSuccess = false;
+                    model.Message = "Melumat tapilmadi";
+                }
+                else
+                {
+                    model.Obj = result;
+                    model.IsSuccess = true;
+                    model.Message = "Emeliyyat ugurludur";
+                }
+                return model;
+
+            }
+            catch (Exception ex)
+            {
+                model.IsSuccess = true;
+                model.Message = "Xeta bas verdi" + ex.ToString();
+                return model;
+            }
+        }
+        public BaseResponceModel<Countries> GetCountryById(int id)
+        {
+            BaseResponceModel<Countries> model = new BaseResponceModel<Countries>();
+            try
+            {
+                var result = _countryRepository.GetById(id);
                 if (result is null)
                 {
                     model.IsSuccess = false;
@@ -124,6 +170,7 @@ namespace Customer.Services
         public BaseResponceModel<bool> DeleteCustomer(int id)
         {
             BaseResponceModel<bool> model = new BaseResponceModel<bool>();
+
             try
             {
                 var deletedCustomer = _customerRepository.GetById(id);
@@ -157,14 +204,14 @@ namespace Customer.Services
             }
 
         }
-        public BaseResponceModel<bool> UpdateCustomer(UpdatedCustomers customer)
+        public BaseResponceModel<bool> UpdateCustomer(int id,UpdatedCustomers customer)
         {
             BaseResponceModel<bool> model = new BaseResponceModel<bool>();
             try
             {
-                var oldCustomer = _customerRepository.GetById(customer.CustomerId);
+                var oldCustomer = _customerRepository.GetById(id);
 
-                if (customer is null || customer.CustomerId <= 0)
+                if (customer is null || id <= 0)
                 {
                     model.IsSuccess = false;
                     model.Obj = false;
@@ -216,6 +263,5 @@ namespace Customer.Services
 
 
         }
-
     }
 }
